@@ -35,6 +35,6 @@ public class LoginLockedUser {
     @Then("Homepage shows the alert and login fails")
     @Step("Read alert message")
     public void homepage_shows_the_alert_and_login_fails() {
-        assertEquals(alertResult,"Epic sadface: Sorry, this user has been locked out.");
+        assertEquals(alertResult,"Epic sadface: Sorry, this user has been locked out");
     }
 }
