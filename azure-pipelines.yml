@@ -30,12 +30,11 @@ jobs:
   
   # 3.1. Instalación de Java (Pre-requisito para Maven)
   # Java Tool Installer funciona igual en Windows
-  - task: JavaToolInstaller@0
-    displayName: 'Instalar Java 11'
+  - task: UseJavaVersion@1
+    displayName: 'Usar Java 11 (Desde la caché del Agente)'
     inputs:
       versionSpec: '11'
       jdkArchitectureOption: 'x64' # <-- Especifica la arquitectura de 64 bits
-      jdkSourceOption: 'toolscache' # <-- Indica que use la caché interna de Azure
       
   # 3.2. Ejecución del Comando Maven (Lógica de CI)
   # Usamos CmdLine@2 para comandos de Windows (cmd)
