@@ -28,23 +28,24 @@ jobs:
 
   steps:
   
-  # 3.1. Instalación de Java (Pre-requisito para Maven)
-  # Java Tool Installer funciona igual en Windows
-  - task: UseJavaVersion@1
-    displayName: 'Usar Java 11 (Desde la caché del Agente)'
+  # 3.1. Configuración de Java mediante Comando (Asume que Java ya existe)
+  - task: CmdLine@2
+    displayName: 'Verificar y Configurar Path de Java'
     inputs:
-      versionSpec: '11'
-      jdkArchitectureOption: 'x64' # <-- Especifica la arquitectura de 64 bits
-      
-  # 3.2. Ejecución del Comando Maven (Lógica de CI)
-  # Usamos CmdLine@2 para comandos de Windows (cmd)
+      script: |
+        echo Buscando versión de Java...
+        java -version
+        # Nota: En los agentes de Windows, 'java' ya suele estar en el path.
+        
+  # 3.2. Ejecución del Comando Maven...
   - task: CmdLine@2
     displayName: 'Ejecutar Tests Maven en $(browser)'
     inputs:
       script: |
         echo Iniciando tests en $(browser) en modo Headless...
+        # Maven ya debería encontrar el JDK configurado por el agente
         mvn clean install -Dbrowser=$(browser) -Dheadless=$(headless_mode)
-    
+
   # 3.3. Publicación de Resultados (JUnit)
   # Esta tarea funciona igual en Windows y Linux
   - task: PublishTestResults@2
