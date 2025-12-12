@@ -35,7 +35,6 @@ jobs:
       script: |
         echo Buscando versión de Java...
         java -version
-        # Nota: En los agentes de Windows, 'java' ya suele estar en el path.
         
   # 3.2. Ejecución del Comando Maven...
   - task: CmdLine@2
