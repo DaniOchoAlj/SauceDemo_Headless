@@ -1,0 +1,55 @@
+# azure-pipelines.yml
+# Ejecución de Tests Paralelos en Agentes de Windows
+
+# 1. Trigger: Se activa automáticamente con un push a la rama 'main'
+trigger:
+- main
+
+# 2. Variables para el modo de ejecución (Headless)
+variables:
+  headless_mode: 'true'
+
+# 3. Jobs: Define la lista de trabajos
+jobs:
+- job: ParallelBrowserTests
+  displayName: 'Ejecución Paralela de Tests'
+  
+  # Strategy: Define la matriz de ejecución
+  strategy:
+    matrix:
+      Chrome_Tests:
+        browser: 'chrome'
+      Edge_Tests:
+        browser: 'edge'
+
+  # Pool: El agente (máquina virtual) donde se ejecutará el código
+  pool:
+    vmImage: 'windows-latest' # <--- ¡Cambiado a Windows!
+
+  steps:
+  
+  # 3.1. Instalación de Java (Pre-requisito para Maven)
+  # Java Tool Installer funciona igual en Windows
+  - task: JavaToolInstaller@0
+    displayName: 'Instalar Java 11'
+    inputs:
+      versionSpec: '11'
+      
+  # 3.2. Ejecución del Comando Maven (Lógica de CI)
+  # Usamos CmdLine@2 para comandos de Windows (cmd)
+  - task: CmdLine@2
+    displayName: 'Ejecutar Tests Maven en $(browser)'
+    inputs:
+      script: |
+        echo Iniciando tests en $(browser) en modo Headless...
+        mvn clean install -Dbrowser=$(browser) -Dheadless=$(headless_mode)
+    
+  # 3.3. Publicación de Resultados (JUnit)
+  # Esta tarea funciona igual en Windows y Linux
+  - task: PublishTestResults@2
+    displayName: 'Publicar Resultados de Tests'
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/surefire-reports/TEST-*.xml' 
+      mergeTestResults: true
+      testRunTitle: 'Resultados $(Browser) Headless'
