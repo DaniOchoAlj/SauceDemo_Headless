@@ -34,6 +34,7 @@ jobs:
     displayName: 'Instalar Java 11'
     inputs:
       versionSpec: '11'
+      jdkArchitectureOption: 'x64' # <-- Especifica la arquitectura de 64 bits
       
   # 3.2. Ejecución del Comando Maven (Lógica de CI)
   # Usamos CmdLine@2 para comandos de Windows (cmd)
